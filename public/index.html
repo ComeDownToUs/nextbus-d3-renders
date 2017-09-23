@@ -10,13 +10,13 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-    <script src='https://d3js.org/d3.v4.min.js'></script>
+<!--     <script src='https://d3js.org/d3.v4.min.js'></script>
     <script src='sfmaps/arteries.js'></script>
     <script src='sfmaps/freeways.js'></script>
     <script src='sfmaps/neighborhoods.js'></script>
     <script src='sfmaps/streets.js'></script>
     <script src='sfmaps/routePaths.js'></script>
-    <script src='sfmaps/stops.js'></script>
+    <script src='sfmaps/stops.js'></script> -->
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -33,6 +33,7 @@
       You need to enable JavaScript to run this app.f
     </noscript>
     <script>
+      /*
       var scale = 1.5; 
       var width = 550*scale;
       var height = 450*scale;
@@ -46,11 +47,11 @@
         // .attr("viewBox", "0 0 "+width+" "+height)
         .attr('fill', '#ccccff');
 
-      var g  = svg.append('g'); //coastlines, if can be found
-      var g1 = svg.append('g');
+      var g1  = svg.append('g');
       var g2 = svg.append('g');
       var g3 = svg.append('g');
       var g4 = svg.append('g');
+      var g5 = svg.append('g');
 
       var equiProjection = d3.geoEquirectangular()
         .scale(190000*scale)
@@ -65,7 +66,7 @@
         //alert(d.properties.title)
       }
 
-      g.selectAll('path')
+      g1.selectAll('path')
         .data(neighborhoods.features)
         .enter()
         .append('path')
@@ -74,7 +75,7 @@
         .attr('fill', '#bbffbb')
         .attr('d', geoPath);
 
-      g1.selectAll('path')
+      g2.selectAll('path')
         .data(streets.features)
         .enter()
         .append('path')
@@ -82,7 +83,7 @@
         .attr('fill', 'rgba(0,0,0,0)')
         .attr('d', geoPath);
 
-      g2.selectAll('path')
+      g3.selectAll('path')
         .data(freeways.features)
         .enter()
         .append('path')
@@ -91,7 +92,7 @@
         .attr('fill', 'rgba(0,0,0,0)')
         .attr('d', geoPath);
 
-      g3.selectAll('path')
+      g4.selectAll('path')
         .data(neighborhoods.features)
         .enter()
         .append('path')
@@ -100,7 +101,7 @@
         .attr('fill', 'rgba(0,0,0,0)')
         .attr('d', geoPath);
 
-      g4.selectAll('path')
+      g5.selectAll('path')
         .data(routePaths.features)
         .enter()
         .append('path')
@@ -115,22 +116,12 @@
         .attr('fill', 'none')
         .attr('d', geoPath)
         .on('mouseover', handleMouseOver);
-
+*/
 
 
  
   </script>
     <section></section>
     <div id="root"></div>
-    <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
-
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
-
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
-    -->
   </body>
 </html>

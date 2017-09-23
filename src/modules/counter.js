@@ -1,12 +1,19 @@
+import mapData from '../sfmap'
+
 export const INCREMENT_REQUESTED = 'counter/INCREMENT_REQUESTED'
 export const INCREMENT = 'counter/INCREMENT'
 export const DECREMENT_REQUESTED = 'counter/DECREMENT_REQUESTED'
 export const DECREMENT = 'counter/DECREMENT'
 
+export const FETCH_ALL_LOCATIONS = 'map/FETCH_ALL_LOCATIONS'
+export const FETCH_ROUTE_LOCATIONS = 'map/FETCH_ROUTE_LOCATIONS'
+export const FETCH_ROUTE_DATA = 'map/FETCH_ROUTE_DATA'
+
 const initialState = {
   count: 0,
   isIncrementing: false,
-  isDecrementing: false
+  isDecrementing: false,
+  ...mapData
 }
 
 export default (state = initialState, action) => {
