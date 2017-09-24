@@ -13,9 +13,14 @@ const App = () => (
     </header>
 
     <main>
-      <SFMap />
-      <Route exact path="/" component={Home} />
-      <Route exact path="/about-us" component={About} />
+      <div style={{width: 70 +'%', float: 'left', position: 'relative'}}>
+        <SFMap />
+      </div>
+      <div style={{width: 30 +'%', float: 'left'}}>
+        <Route exact path="/" component={Home} />
+        <Route exact path="/about-us" component={About} />
+        <Route exact path="/route/:id" component={About} /> 
+      </div>
     </main>
   </div>
 )
