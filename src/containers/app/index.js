@@ -4,6 +4,8 @@ import { Route, Link } from 'react-router-dom'
 import Home from '../home'
 import About from '../about'
 import SFMap from '../sfmap'
+import RouteView from '../routeview'
+
 
 const App = () => (
   <div>
@@ -19,7 +21,7 @@ const App = () => (
       <div style={{width: 30 +'%', float: 'left'}}>
         <Route exact path="/" component={Home} />
         <Route exact path="/about-us" component={About} />
-        <Route exact path="/route/:id" component={About} /> 
+        <Route exact path="/route/:id" component={RouteView} /> 
       </div>
     </main>
   </div>

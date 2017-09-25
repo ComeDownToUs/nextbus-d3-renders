@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
         count: state.count - 1,
         isDecrementing: !state.isDecrementing
       }
-    case FETCH_ALL_LIVEDATA:
+    case FETCH_ROUTE_LIVEDATA:
       return {
         ...state,
         liveData: action.live
@@ -82,25 +82,51 @@ export const updateDataField = (data) => {
   }
 }
 
-export const getLiveData = () => {
+export const getLiveData = (route) => {
+  console.log(route)
   const agency = 'sf-muni'
   const API_URL = `http://webservices.nextbus.com/service/publicJSONFeed?a=${agency}`;
+  const routeQuery = (route ? `&r=${route}` : '')
+  console.log(`APIREQ ${API_URL}&command=vehicleLocations&t=0${routeQuery}`)
   return dispatch => {
     dispatch({type: FETCHING_DATA})
-    axios.get(`${API_URL}&command=vehicleLocations&t=0`)
+    axios.get(`${API_URL}&command=vehicleLocations&t=0${routeQuery}`)
       .then( response => {
         dispatch({
-          type: FETCH_ALL_LIVEDATA,
-          live: response.data,
+          type: FETCH_ROUTE_LIVEDATA,
+          live: liveDataPoints(response.data),
         })
       })
       .catch( error => {
+        console.log("ERRRRR")
+        console.log(error)
         dispatch({
           type: FETCH_ERROR,
-          error: error.response,
+          error: error,
         })
       })
   }
+}
+
+const liveDataPoints = data => {
+  if(!data.vehicle)
+    return null
+  const holder = {
+    type: "FeatureCollection",
+    features: []
+  }
+  holder.features = data.vehicle.map(entry => ({
+    type: "Feature",
+    properties: {
+      title: entry.id,
+      speed: entry.speedKmHr,
+    },
+    geometry: {
+      type: "Point",
+      coordinates: [parseFloat(entry.lon), parseFloat(entry.lat)]
+    }
+  }))
+  return holder
 }
 
 export const increment = () => {
@@ -114,19 +140,6 @@ export const increment = () => {
     })
   }
 }
-export const incrementAsync = () => {
-  return dispatch => {
-    dispatch({
-      type: INCREMENT_REQUESTED
-    })
-
-    return setTimeout(() => {
-      dispatch({
-        type: INCREMENT
-      })
-    }, 3000)
-  }
-}
 export const decrement = () => {
   return dispatch => {
     dispatch({
@@ -136,18 +149,5 @@ export const decrement = () => {
     dispatch({
       type: DECREMENT
     })
-  }
-}
-export const decrementAsync = () => {
-  return dispatch => {
-    dispatch({
-      type: DECREMENT_REQUESTED
-    })
-
-    return setTimeout(() => {
-      dispatch({
-        type: DECREMENT
-      })
-    }, 3000)
   }
 }
