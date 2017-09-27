@@ -22,6 +22,8 @@ The NextBus Scripts below will likely be needed to be ran first at a later stage
 This is something I'll fill in as I make compromises for convenience
 
 - Only install relevant D3 modules: I'm not familiar enough with D3 to know what I'd need other than D3 Geo at the moment
+- Use topojson for initial setup files to reduce the load
+- Use the listed stops from schedule requests in routes view as the actual returned stops are useless. Possibly genereate those stops into default json instead?
 
 # NextBus API Toolset
 

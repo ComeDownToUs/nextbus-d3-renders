@@ -1,11 +1,10 @@
 import React from "react";
-import { push } from "react-router-redux";
-import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
+
+import StopsDisplay from './stops'
 
 const getRouteID = pathname => {
   const splat = pathname.split(/(\?|#|\/)/)
-  console.log(splat)
   if(splat[2].toLowerCase() === 'route')
     return splat[4]
   else
@@ -22,7 +21,6 @@ const getRouteStops = (routeData, stopData) => {
 
 const RouteView = props => {
   const routeID = getRouteID(props.pathname)
-  console.log(routeID)
   if(!routeID){
     return (<div> 404 </div>)
   }
@@ -31,16 +29,14 @@ const RouteView = props => {
   return(
     <div>
       {routeData.title}
-      {
-        routeStops.map( (stop, i) => <div key={`stop-${i}`}>{i} {stop}</div>)
-      }
+      <StopsDisplay stops={routeStops} />
     </div>
   )
 }
 
 const mapStateToProps = state => ({
-  stops: state.counter.stops,
-  routes: state.counter.routes,
+  stops: state.transport.stops,
+  routes: state.transport.routes,
   pathname: state.routing.location.pathname,
 })
 

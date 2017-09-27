@@ -5,19 +5,19 @@ import { connect } from "react-redux";
 import {
   increment,
   decrement,
-} from "../../modules/counter";
+} from "../../modules/transport";
 
 const Home = props => (
   <div>
     <h1>Home</h1>
     <p>Count: {props.count}</p>
     <p>
-      <button onClick={props.increment} disabled={props.isIncrementing}>
+      <button onClick={props.increment}>
         Increment
       </button>
     </p>
     <p>
-      <button onClick={props.decrement} disabled={props.isDecrementing}>
+      <button onClick={props.decrement}>
         Decrementing
       </button>
     </p>
@@ -30,9 +30,7 @@ const Home = props => (
 );
 
 const mapStateToProps = state => ({
-  count: state.counter.count,
-  isIncrementing: state.counter.isIncrementing,
-  isDecrementing: state.counter.isDecrementing
+  count: state.transport.count,
 });
 
 const mapDispatchToProps = dispatch =>
