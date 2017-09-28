@@ -1,15 +1,13 @@
 import React from 'react'
 
 const StopView = props => (
-  <div>
-    <ul>
-      {
-        props.stops.map( (stop, i) => 
-          <div key={`stop-${i}`}>{i} {stop}</div>
-        )
-      }
-    </ul>
-  </div>
+  <ul>
+    {
+      props.stops.map( (stop, i) => 
+        <li key={`stop-${i}`}>{i} {stop}</li>
+      )
+    }
+  </ul>
 )
 
 export default StopView

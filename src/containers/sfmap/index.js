@@ -16,29 +16,29 @@ import {
 import { doNothing } from "../../helpers/placeholders";
 import { routeParser } from "../../helpers/routeParser";
 
+import {
+  routeOptions,
+  neighborhoodOptions,
+  streetOptions,
+  selectedRouteOptions,
+  busOptions
+} from "./d3displayoptions";
+
 import neighborhoods from "../../sfmap/neighborhoods.json";
 import streets from "../../sfmap/streets.json";
 import routePaths from "../../sfmap/routePaths.json";
 
 class SFMap extends Component {
   constructor(props) {
+    console.log('constructor')
     super(props);
-
+    
     this.path = routeParser(this.props.path);
 
     // map layout controls
     this.scale = 6;
     this.width = 550 * this.scale;
     this.height = 450 * this.scale;
-    this.defaultD3Options = {
-      classPrefix: "d3 ",
-      stroke: "rgba(0,0,0,0.4)",
-      strokeWidth: "1",
-      fill: "none",
-      outerClass: "classReqd",
-      text: false,
-      mouseOver: () => {}
-    };
 
     // live location tracker
     this.locationCheck = doNothing;
@@ -48,31 +48,27 @@ class SFMap extends Component {
     this.liveView = false;
     this.liveSetup();
   }
-
   componentWillMount() {
     //building core map operations
-    this.neighborhoods = this.buildPath(neighborhoods, {
-      classPrefix: "neighborhood neigh-",
-      stroke: "rgba(0,0,0,1)",
-      strokeWidth: "0",
-      fill: "rgba(200,255,200,1)",
-      outerClass: "neighborhoods"
-    });
-    this.streets = this.buildPath(streets, { outerClass: "streets" });
-    this.routes = this.buildRoutes(routePaths, {
-      classPrefix: "route route-",
-      strokeWidth: "6",
-      fill: "none",
-      outerClass: "routes"
-    });
+    this.neighborhoods = this.buildPath(neighborhoods, neighborhoodOptions);
+    this.streets = this.buildPath(streets, streetOptions);
+    this.routes = this.buildRoutes(routePaths, routeOptions);
   }
-  componentDidMount() {}
-  componentWillUpdate() {
+  componentDidMount() { }
+  componentWillUpdate() { }
+  componentDidUpdate(prevProps, prevState) {
     const oldRouteID = this.path.id;
     this.path = routeParser(this.props.path);
     if (oldRouteID !== this.path.id && this.path.id) {
+      console.log('newL')
       this.liveSetup();
     }
+  }
+
+  newPathId(){
+    this.locationCheck = doNothing
+    this.props.clearLiveData()
+    console.log('newP')
   }
 
   liveSetup() {
@@ -100,19 +96,17 @@ class SFMap extends Component {
   }
 
   buildPath(dataSet, options) {
-    options = {
-      ...this.defaultD3Options,
-      ...options
-    };
     const gPath = this.getGeoPath();
-    const isBus = options.classPrefix.indexOf('bus') !== -1 ? true:false
-    console.log(isBus)
-    console.log(dataSet.features[0])
+    const isBus = options.classPrefix.indexOf("bus") !== -1 ? true : false;
     const geo = dataSet.features.map((d, i) => (
       <path
         key={"path" + i}
         d={gPath(d)}
-        className={isBus && d.properties.speed > 0 ? 'moving' : d.properties.neighborho}
+        className={
+          isBus && d.properties.speed > 0
+            ? options.classPrefix + "moving"
+            : options.classPrefix + d.properties[options.keyID]
+        }
         stroke={options.stroke}
         strokeWidth={options.strokeWidth}
         fill={options.fill}
@@ -125,17 +119,10 @@ class SFMap extends Component {
   }
 
   buildRoutes(dataSet, options) {
-    options = {
-      ...this.defaultD3Options,
-      ...options
-    };
-    this.props.isLoading()
+    this.props.isLoading();
     const gPath = this.getGeoPath();
     const geo = dataSet.features.map((d, i) => (
-      <Link
-        key={`route-link-${i}`}
-        to={`/route/${d.properties.tag}`}
-      >
+      <Link key={`route-link-${i}`} to={`/route/${d.properties.tag}`} >
         <path
           key={"path" + i}
           d={gPath(d)}
@@ -150,6 +137,9 @@ class SFMap extends Component {
           onMouseLeave={() => {
             this.props.updateDataField(null);
             this.dataView = null;
+          }}
+          onClick={() => {
+            this.newPathId()
           }}
         />
       </Link>
@@ -170,11 +160,9 @@ class SFMap extends Component {
 
   render() {
     const { width, height } = this;
-
     return (
       <div>
         <svg
-          ref={() => this.node}
           preserveAspectRatio="xMinYMin meet"
           viewBox={"0 0 " + width + " " + height}
           className={this.props.count % 3 === 0 ? "no-routes" : ""}
@@ -183,30 +171,19 @@ class SFMap extends Component {
           {this.streets}
           {this.routes}
           {this.path.id
-            ? this.buildRoutes(
-                {
+            ? this.buildRoutes({
                   features: routePaths.features.filter(
                     r => r.properties.tag === this.path.id
                   )
-                },
-                {
-                  strokeWidth: 20,
-                  strokeOpacity: 1,
-                  outerClass: "selected-route"
-                }
+                }, selectedRouteOptions
               )
             : null}
           {this.props.liveData !== null && this.path.id
-            ? this.buildPath(this.props.liveData, {
-                classPrefix: "buses bus-",
-                stroke: "rgba(0,0,0,1)",
-                strokeWidth: "25",
-                outerClass: "livedata"
-              })
+            ? this.buildPath(this.props.liveData, busOptions)
             : null}
         </svg>
-        
-        { this.props.isFetching ? 'Loading...':''}
+
+        {this.props.isFetching ? "Loading..." : ""}
 
         {this.dataView ? this.dataView : null}
       </div>
@@ -221,7 +198,7 @@ const mapStateToProps = state => ({
   path: state.routing.location.pathname,
   info: state.transport.hoverItem,
   liveData: state.transport.liveData,
-  isFetching: state.transport.isFetching,
+  isFetching: state.transport.isFetching
 });
 
 const mapDispatchToProps = dispatch =>

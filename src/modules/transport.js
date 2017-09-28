@@ -42,13 +42,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         liveData: action.live,
-        isFetching: false,
       }
     case CLEAR_LIVEDATA:
       return {
         ...state,
         liveData: null,
-        isFetching: false,
       }
     case UPDATE_INFO_FIELD:
       return {
@@ -113,6 +111,7 @@ export const getLiveData = (route) => {
           type: FETCH_ROUTE_LIVEDATA,
           live: liveDataPoints(response.data),
         })
+        dispatch({type: FETCHED_DATA})
       })
       .catch( error => {
         console.log("ERRRRR")
@@ -121,6 +120,7 @@ export const getLiveData = (route) => {
           type: FETCH_ERROR,
           error: error,
         })
+        dispatch({type: FETCHED_DATA})
       })
   }
 }
@@ -136,11 +136,12 @@ export const clearLiveData = () => {
 const liveDataPoints = data => {
   if(!data.vehicle)
     return null
+  const vehicles = Array.isArray(data.vehicle) ? data.vehicle : [data.vehicle]
   const holder = {
     type: "FeatureCollection",
     features: []
   }
-  holder.features = data.vehicle.map(entry => ({
+  holder.features = vehicles.map(entry => ({
     type: "Feature",
     properties: {
       title: entry.id,
