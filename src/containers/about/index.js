@@ -1,8 +1,8 @@
-import React from 'react'
+import React from "react";
 
 export default () => (
   <div>
-    <h1>About Us</h1>
-    <p>Hello Medium!</p>
+    <h1>About</h1>
+    A quick tutorial of how the map works perhaps
   </div>
-)
+);

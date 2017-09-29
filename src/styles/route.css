@@ -1,0 +1,6 @@
+.route-view .stops {
+  background-color: #bbb; }
+  .route-view .stops .stops-list {
+    height: 400px;
+    background-color: #ccc;
+    overflow-y: scroll; }
