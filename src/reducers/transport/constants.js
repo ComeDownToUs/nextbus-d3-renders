@@ -1,0 +1,8 @@
+export const FETCHING_DATA = "map/FETCHING_DATA";
+export const FETCHED_DATA = "map/FETCHED_DATA";
+export const FETCH_ERROR = "map/FETCH_ERROR";
+export const FETCH_ALL_LIVEDATA = "map/FETCH_ALL_LOCATIONS";
+export const FETCH_ROUTE_LIVEDATA = "map/FETCH_ROUTE_LOCATIONS";
+export const CLEAR_LIVEDATA = "map/CLEAR_LIVEDATA";
+export const UPDATE_INFO_FIELD = "map/UPDATE_INFO_FIELD";
+export const CLEAR_INFO_FIELD = "map/CLEAR_INFO_FIELD";

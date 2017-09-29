@@ -6,13 +6,15 @@ import { geoEquirectangular, geoPath } from "d3";
 
 import HoverData from "./hoverdata";
 
+import "../../styles/map.css";
+
 import {
   getLiveData,
   clearLiveData,
   updateDataField,
   isLoading,
   hasLoaded
-} from "../../modules/transport";
+} from "../../reducers/transport/actions";
 import { doNothing } from "../../helpers/placeholders";
 import { routeParser } from "../../helpers/routeParser";
 
@@ -24,15 +26,15 @@ import {
   busOptions
 } from "./d3displayoptions";
 
-import neighborhoods from "../../sfmap/neighborhoods.json";
-import streets from "../../sfmap/streets.json";
-import routePaths from "../../sfmap/routePaths.json";
+import neighborhoods from "../../data/json/neighborhoods.json";
+import streets from "../../data/json/streets.json";
+import routePaths from "../../data/json/routePaths.json";
 
 class SFMap extends Component {
   constructor(props) {
-    console.log('constructor')
+    console.log("constructor");
     super(props);
-    
+
     this.path = routeParser(this.props.path);
 
     // map layout controls
@@ -54,21 +56,19 @@ class SFMap extends Component {
     this.streets = this.buildPath(streets, streetOptions);
     this.routes = this.buildRoutes(routePaths, routeOptions);
   }
-  componentDidMount() { }
-  componentWillUpdate() { }
+  componentDidMount() {}
+  componentWillUpdate() {}
   componentDidUpdate(prevProps, prevState) {
     const oldRouteID = this.path.id;
     this.path = routeParser(this.props.path);
     if (oldRouteID !== this.path.id && this.path.id) {
-      console.log('newL')
       this.liveSetup();
     }
   }
 
-  newPathId(){
-    this.locationCheck = doNothing
-    this.props.clearLiveData()
-    console.log('newP')
+  newPathId() {
+    this.locationCheck = doNothing;
+    this.props.clearLiveData();
   }
 
   liveSetup() {
@@ -122,14 +122,12 @@ class SFMap extends Component {
     this.props.isLoading();
     const gPath = this.getGeoPath();
     const geo = dataSet.features.map((d, i) => (
-      <Link key={`route-link-${i}`} to={`/route/${d.properties.tag}`} >
+      <Link key={`route-link-${i}`} to={`/route/${d.properties.tag}`}>
         <path
           key={"path" + i}
           d={gPath(d)}
           className={`route route-${d.properties.title}`}
-          stroke={options.stroke ? d.properties.color : "none"}
-          strokeWidth={options.strokeWidth}
-          fill={options.fill}
+          stroke={options.customStroke ? d.properties.color : null}
           onMouseEnter={() => {
             this.props.updateDataField(d.properties.tag);
             this.dataView = this.getDataView(d.properties);
@@ -139,7 +137,7 @@ class SFMap extends Component {
             this.dataView = null;
           }}
           onClick={() => {
-            this.newPathId()
+            this.newPathId();
           }}
         />
       </Link>
@@ -162,29 +160,29 @@ class SFMap extends Component {
     const { width, height } = this;
     return (
       <div>
+        {this.props.isFetching ? "Loading..." : "Data goes here"}
         <svg
           preserveAspectRatio="xMinYMin meet"
-          viewBox={"0 0 " + width + " " + height}
+          viewBox={"0 0 " + width + " " + height * 2}
           className={this.props.count % 3 === 0 ? "no-routes" : ""}
         >
           {this.neighborhoods}
           {this.streets}
           {this.routes}
           {this.path.id
-            ? this.buildRoutes({
+            ? this.buildRoutes(
+                {
                   features: routePaths.features.filter(
                     r => r.properties.tag === this.path.id
                   )
-                }, selectedRouteOptions
+                },
+                selectedRouteOptions
               )
             : null}
           {this.props.liveData !== null && this.path.id
             ? this.buildPath(this.props.liveData, busOptions)
             : null}
         </svg>
-
-        {this.props.isFetching ? "Loading..." : ""}
-
         {this.dataView ? this.dataView : null}
       </div>
     );

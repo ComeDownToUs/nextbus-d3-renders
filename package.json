@@ -5,6 +5,7 @@
   "dependencies": {
     "axios": "^0.16.2",
     "d3": "^4.10.2",
+    "node-sass-chokidar": "0.0.3",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-redux": "^5.0.6",
@@ -23,6 +24,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
+    "build-css": "node-sass-chokidar sass -o src/styles",
+    "watch-css": "npm run build-css && node-sass-chokidar src/ -o src/ --watch --recursive",
     "nextbus_api_reqs": "node nextbus_setup/apiCalls.js sf-muni routes",
     "nextbus_aggregated": "node nextbus_setup/buildAggregatedData.js sf-muni",
     "nextbus_geojsons": "node nextbus_setup/buildGeoJsons.js sf-muni routes",

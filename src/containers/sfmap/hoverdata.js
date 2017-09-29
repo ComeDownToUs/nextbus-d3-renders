@@ -1,27 +1,21 @@
-import React from 'react'
+import React from "react";
+
+import "../../styles/hoverdata.css";
 
 const HoverData = props => {
-  const { route, start, end } = props
-  return(
+  const { route, start, end } = props;
+  return (
     <div className="infoBox">
-      <div>
-        <div className="forty">Route</div>
-        <div className="sixty">{route.title}</div>
-        <div className="forty">Stops</div>
-        <div className="sixty">{route.stops.length}</div>
-        <div className="forty">Source</div>
-        <div className="sixty">
-          {start.title}
-        </div>
-        <div className="forty">Dest.</div>
-        <div className="sixty">
-          {
-            end.title
-          }
-        </div>
-      </div>
+      <div className="thirty">Route</div>
+      <div className="seventy">{route.title}</div>
+      <div className="thirty">Stops</div>
+      <div className="seventy">{route.stops.length}</div>
+      <div className="thirty">Source</div>
+      <div className="seventy">{start.title}</div>
+      <div className="thirty">Dest.</div>
+      <div className="seventy">{end.title}</div>
     </div>
-  )
-}
+  );
+};
 
-export default HoverData
+export default HoverData;

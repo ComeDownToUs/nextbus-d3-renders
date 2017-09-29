@@ -3,28 +3,3 @@ body {
   padding: 0;
   font-family: sans-serif;
 }
-
-path.route:hover{
-  stroke-width: 24;
-  stroke-opacity: 1;
-}
-path.route{
-  stroke-opacity: 0.3;
-}
-
-.sixty{
-  float:left;
-  width:60%;
-}
-.forty{
-  float:left;
-  width:40%;
-}
-.infoBox{
-  padding: 16px;
-  width: 50%;
-  position: absolute;
-  top: 0px;
-  color: white;
-  background-color: rgba(0,0,0,0.8);
-}

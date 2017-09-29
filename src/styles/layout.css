@@ -1,0 +1,11 @@
+main {
+  max-width: 1920px;
+  display: flex; }
+  main .mapview {
+    height: 100vh;
+    flex: 5;
+    overflow-y: hidden; }
+  main .infoview {
+    height: 100vh;
+    flex: 3;
+    overflow-y: scroll; }

@@ -2,67 +2,60 @@
   - apiCalls to be called for Route Paths
   - apiCalls and buildStopData for Stop Points  */
 
-const { readJSON, writeJSON } = require('./jsonIO.js')
+const { readJSON, writeJSON } = require("./jsonIO.js");
 
+const stopPoints = { type: "FeatureCollection", features: [] };
+const routePaths = { type: "FeatureCollection", features: [] };
+const dir = "nextbus_setup/";
+const routeDataDir = dir + "routeData/";
+const aggregatedDir = dir + "aggregatedData/";
 
-const stopPoints = {type: 'FeatureCollection', features: []}
-const routePaths = {type: 'FeatureCollection', features: []}
-const dir = 'nextbus_setup/'
-const routeDataDir = dir+'routeData/'
-const aggregatedDir = dir+'aggregatedData/'
-
-const buildStopPoints = (directory) => {
-  stopJson = readJSON(`${directory}aggregatedData/stops.json`)
-  for(let i in stopJson){
-    console.log(i)
+const buildStopPoints = directory => {
+  stopJson = readJSON(`${directory}aggregatedData/stops.json`);
+  for (let i in stopJson) {
+    console.log(i);
     stopPoints.features.push({
-      type: 'Feature',
+      type: "Feature",
       properties: {
-        title: stopJson[i].title,
+        title: stopJson[i].title
       },
       geometry: {
-        type: 'Point',
-        coordinates: [  
-          parseFloat(stopJson[i].lon),
-          parseFloat(stopJson[i].lat)
-        ]
+        type: "Point",
+        coordinates: [parseFloat(stopJson[i].lon), parseFloat(stopJson[i].lat)]
       }
-    })
+    });
   }
-  writeJSON(`${directory}geoJSONS/stops.geojson`, stopPoints)
-}
+  writeJSON(`${directory}geoJSONS/stops.geojson`, stopPoints);
+};
 
 const getLineStrings = routePath => {
   return routePath.map(points => {
     const geoPath = points.point.map(point => {
-      return [
-        parseFloat(point.lon),
-        parseFloat(point.lat), 
-      ]
-    })
-    return geoPath
-  })
-}
+      return [parseFloat(point.lon), parseFloat(point.lat)];
+    });
+    return geoPath;
+  });
+};
 
-const buildRoutes = (directory) => {
-  routesJson = readJSON(`${directory}routeData/index.json`)
+const buildRoutes = directory => {
+  routesJson = readJSON(`${directory}routeData/index.json`);
   routesJson.route.map(route => {
-    const routeJson = readJSON(`${directory}routeData/${route.tag}.json`)
+    const routeJson = readJSON(`${directory}routeData/${route.tag}.json`);
     routePaths.features.push({
-      type: 'Feature',
+      type: "Feature",
       properties: {
         title: routeJson.route.title,
         tag: routeJson.route.tag,
-        color: routeJson.route.color,
+        color: routeJson.route.color
       },
       geometry: {
-        type: 'MultiLineString',
+        type: "MultiLineString",
         coordinates: getLineStrings(routeJson.route.path)
       }
-    })
-  })
-  writeJSON(`${directory}geoJSONS/routePaths.geojson`, routePaths)
-}
+    });
+  });
+  writeJSON(`${directory}geoJSONS/routePaths.geojson`, routePaths);
+};
 
-buildRoutes(dir)
-buildStopPoints(dir)
+buildRoutes(dir);
+buildStopPoints(dir);

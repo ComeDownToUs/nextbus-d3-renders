@@ -1,30 +1,33 @@
-import React from 'react';
-import { Route, Link } from 'react-router-dom'
+import React from "react";
+import { Route, Link, Switch } from "react-router-dom";
 
-import Home from '../home'
-import About from '../about'
-import SFMap from '../sfmap'
-import RouteView from '../routeview'
+import Home from "../home";
+import About from "../about";
+import SFMap from "../sfmap";
+import RouteView from "../routeview";
+import NotFound from "../notfound";
 
+import "../../styles/layout.css";
 
 const App = () => (
-  <div>
-    <header>
-      <Link to="/">Home</Link>
-      <Link to="/about-us">About</Link>
-    </header>
-
-    <main>
-      <div style={{width: 70 +'%', float: 'left', position: 'relative'}}>
-        <SFMap />
-      </div>
-      <div style={{width: 30 +'%', float: 'left'}}>
+  <main>
+    <div className="mapview">
+      <SFMap />
+    </div>
+    <div className="infoview">
+      <header>
+        <Link to="/">Home</Link>
+        <Link to="/about-us">About</Link>
+      </header>
+      <Switch>
         <Route exact path="/" component={Home} />
         <Route exact path="/about-us" component={About} />
-        <Route exact path="/route/:id" component={RouteView} /> 
-      </div>
-    </main>
-  </div>
-)
+        <Route exact path="/route/:id" component={RouteView} />
+        <Route name="notfound" path="/404" component={NotFound} />
+        <Route component={NotFound} />
+      </Switch>
+    </div>
+  </main>
+);
 
-export default App
+export default App;
