@@ -29,13 +29,14 @@
 
 .live-data{
   .bus{
-    stroke-width: 25;
+    stroke-width: 20;
     stroke: gray;
     fill: white;
+    r: 25;
     &.moving{
-      stroke-width: 40;
       stroke: black;
       fill: white;
+      r: 40;
     }
   }
 }

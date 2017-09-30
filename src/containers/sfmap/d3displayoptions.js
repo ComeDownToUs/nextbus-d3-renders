@@ -23,6 +23,7 @@ export const routeOptions = {
 export const selectedRouteOptions = {
   ...d3Defaults,
   outerClass: "selected-route",
+  classPrefix: "route",
   customStroke: true
 };
 
@@ -36,5 +37,6 @@ export const neighborhoodOptions = {
 export const busOptions = {
   ...d3Defaults,
   classPrefix: "bus ",
-  outerClass: "live-data"
+  outerClass: "live-data",
+  isBus: true,
 };
