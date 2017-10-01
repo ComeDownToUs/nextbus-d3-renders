@@ -2,6 +2,9 @@ This repo was bootstrapped with Create React App and used [this Medium tutorial]
 
 Due to the limitations of the API at hand, I build a set of scripts to pull down some data that doesn't fluctuate much, please read the motives section below for why. In this repository I've placed all the necessary (but flawed) data from these scripts in the src/sfmap folder along with the provided jsons of San Francisco
 
+Please run the version on master to see general functionality and view the PR at https://github.com/ComeDownToUs/nextbus-d3-renders/pull/2 for a more readable and ordered version (but with rendering speed issues). 
+
+
 ### Table of Contents
 
 - Core App
@@ -75,6 +78,7 @@ UI
 ## Motive
 
 I noticed that the API didn't provide any means to gather stops and that individual route requests were pretty large to the point a user could potentially hit the request limit. As I didn't want to throttle the API with request, I built some scripts to gather data and condense it so the app will load with all the (relatively) static data.
+There's a pretty good chance I'll redo these in a separate repo with greater modularity so they can be of use to others.
 
 ## Available Scripts
 
