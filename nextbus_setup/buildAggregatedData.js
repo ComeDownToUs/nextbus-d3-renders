@@ -22,7 +22,7 @@ const getRouteTags = directory => {
 const addNewStops = stops => {
   let duplicateCounter = 0;
   stops.map(stop => {
-    if (!stopPoints[stop.stopId]) stopPoints[stop.stopId] = stop;
+    if (!stopPoints[stop.tag]) stopPoints[stop.tag] = stop;
     else {
       duplicateCounter += 1;
     }

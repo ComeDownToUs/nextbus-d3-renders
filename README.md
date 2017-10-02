@@ -60,6 +60,7 @@ Technical
 - Redo the API builders to store data better (there are big issues with how I took down stops, best approach would be to pull the more generic ones from the pretty horrible schedule values they return)
 - Loading operations, very primitive one at the moment which do not run great
 - Gather data from schedules so some routes wouldn't display during their off hours if desired
+- Horrible naming (paths could referring to URL paths or SVG paths, routes could be react router or transit routes...)
 
 UI
 - Responsive design

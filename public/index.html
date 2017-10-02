@@ -10,13 +10,6 @@
     -->
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/favicon.ico">
-<!--     <script src='https://d3js.org/d3.v4.min.js'></script>
-    <script src='sfmaps/arteries.js'></script>
-    <script src='sfmaps/freeways.js'></script>
-    <script src='sfmaps/neighborhoods.js'></script>
-    <script src='sfmaps/streets.js'></script>
-    <script src='sfmaps/routePaths.js'></script>
-    <script src='sfmaps/stops.js'></script> -->
     <!--
       Notice the use of %PUBLIC_URL% in the tags above.
       It will be replaced with the URL of the `public` folder during the build.
@@ -33,94 +26,8 @@
       You need to enable JavaScript to run this app.f
     </noscript>
     <script>
-      /*
-      var scale = 1.5; 
-      var width = 550*scale;
-      var height = 450*scale;
-
-      var svg = d3.select('body')
-        .append('div')
-        .append('svg')
-        .attr('width', width)
-        .attr('height', height)
-        // .attr("preserveAspectRatio", "xMinYMin meet")
-        // .attr("viewBox", "0 0 "+width+" "+height)
-        .attr('fill', '#ccccff');
-
-      var g1  = svg.append('g');
-      var g2 = svg.append('g');
-      var g3 = svg.append('g');
-      var g4 = svg.append('g');
-      var g5 = svg.append('g');
-
-      var equiProjection = d3.geoEquirectangular()
-        .scale(190000*scale)
-        .rotate([0,0])
-        .center([-122.434756486329144, 37.747849389243228])
-        .translate([width/2, height/1.5]);
-
-      var geoPath = d3.geoPath()
-          .projection(equiProjection);
-
-      function handleMouseOver(d, i) {  // Add interactivity
-        //alert(d.properties.title)
-      }
-
-      g1.selectAll('path')
-        .data(neighborhoods.features)
-        .enter()
-        .append('path')
-        .attr('stroke', '#000')
-        .attr('stroke-width', 0.25)
-        .attr('fill', '#bbffbb')
-        .attr('d', geoPath);
-
-      g2.selectAll('path')
-        .data(streets.features)
-        .enter()
-        .append('path')
-        .attr('stroke', '#999')
-        .attr('fill', 'rgba(0,0,0,0)')
-        .attr('d', geoPath);
-
-      g3.selectAll('path')
-        .data(freeways.features)
-        .enter()
-        .append('path')
-        .attr('stroke', '#999')
-        .attr('stroke-width', 2)
-        .attr('fill', 'rgba(0,0,0,0)')
-        .attr('d', geoPath);
-
-      g4.selectAll('path')
-        .data(neighborhoods.features)
-        .enter()
-        .append('path')
-        .attr('stroke', 'rgba(0,0,0,0.1)')
-        .attr('stroke-width', 5)
-        .attr('fill', 'rgba(0,0,0,0)')
-        .attr('d', geoPath);
-
-      g5.selectAll('path')
-        .data(routePaths.features)
-        .enter()
-        .append('path')
-        .attr('class', function(d){
-          return 'route-'+d.properties.tag
-        })
-        .attr('stroke', function(d){
-          console.log(d)
-          return d.properties.color
-        })
-        .attr('stroke-width', 2)
-        .attr('fill', 'none')
-        .attr('d', geoPath)
-        .on('mouseover', handleMouseOver);
-*/
-
-
- 
-  </script>
+      
+    </script>
     <section></section>
     <div id="root"></div>
   </body>

@@ -7,8 +7,6 @@ import Paths from "./paths";
 import LinkPaths from "./linkpaths";
 import Points from "./points";
 
-import "../../styles/map.css";
-
 import {
   getLiveData,
   clearLiveData,
@@ -16,6 +14,7 @@ import {
   isLoading,
   hasLoaded
 } from "../../reducers/transport/actions";
+
 import { doNothing } from "../../helpers/placeholders";
 import { routeParser } from "../../helpers/routeParser";
 
@@ -27,9 +26,11 @@ import {
   busOptions
 } from "./d3displayoptions";
 
-import neighborhoods from "../../data/json/neighborhoods.json";
-import streets from "../../data/json/streets.json";
-import routePaths from "../../data/json/routePaths.json";
+import neighborhoods from "../../data/geojson/neighborhoods.json";
+import streets from "../../data/geojson/streets.json";
+import routePaths from "../../data/geojson/routePaths.json";
+
+import "../../styles/map.css";
 
 class SFMap extends Component {
   constructor(props) {

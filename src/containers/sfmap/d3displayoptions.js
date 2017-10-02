@@ -2,7 +2,8 @@ export const d3Defaults = {
   classPrefix: "d3 ",
   outerClass: "classReqd",
   text: false,
-  mouseOver: () => {}
+  mouseOver: () => {},
+  keyID: "PlaceholderValueForDynamicPropertyKey"
 };
 
 export const streetOptions = {
