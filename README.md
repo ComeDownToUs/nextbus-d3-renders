@@ -1,5 +1,7 @@
 This repo was bootstrapped with Create React App and used [this Medium tutorial](https://medium.com/@notrab/getting-started-with-create-react-app-redux-react-router-redux-thunk-d6a19259f71f) to set up Redux and React-Router v4.
 
+Note: For the purposes of this project, libraries such as leaflet JS which do a lot of the heavy lifting were banned
+
 Due to the limitations of the API at hand, I build a set of scripts to pull down some data that doesn't fluctuate much, please read the motives section below for why. In this repository I've placed all the necessary (but flawed) data from these scripts in the src/sfmap folder along with the provided jsons of San Francisco
 
 Please run the version on master to see general functionality and view the PR at https://github.com/ComeDownToUs/nextbus-d3-renders/pull/2 for a more readable and ordered version (but with rendering speed issues). 
@@ -53,18 +55,20 @@ Live locations of buses are currently using paths but really should be using poi
 This is something I'll fill in as I make compromises for convenience
 
 Technical
+- Resolve D3 React child component issues (current lags and stalling, also perhaps an excess of props passed through)
 - Pan and Zoom
 - Only install relevant D3 modules: I'm not familiar enough with D3 to know what I'd need other than D3 Geo at the moment
 - Use topojson for initial setup files to reduce the load
 - Use the listed stops from schedule requests in routes view as the actual returned stops are useless. Possibly genereate those stops into default json instead? This would improve the data displayed at several points
-- Develop Path and Point subcomponents (my attempts caused huge performance issues so I've just left it for now, I'm not happy with how much goes on in the map component at the moment though)
 - Redo the API builders to store data better (there are big issues with how I took down stops, best approach would be to pull the more generic ones from the pretty horrible schedule values they return)
-- Loading operations, very primitive one at the moment that doesn't run great
+- Loading operations, very primitive one at the moment which do not run great
 - Gather data from schedules so some routes wouldn't display during their off hours if desired
+- Horrible naming (paths could referring to URL paths or SVG paths, routes could be react router or transit routes...)
 
 UI
 - Responsive design
-- Labeling; following the inclusion of pan and zoom I'd go to town on labelling, it'd just cause a mess right now but would be necessary for mobile at least
+- Pan and Zoom (again)
+- Labeling; following the inclusion of pan and zoom I'd go to town on labelling, it'd just cause a mess right now but would be necessary for mobile at least, popovers would be a possible compromise
 - Include direction of vehicles in live feed
 - I'd consider flagging connections on routes but I know Muni's rail system is a bit different to the bus in this regard and I see no means of handling that
 - Only display active routes (currently have manually moved all "Owl" routes to start so they're not covering the more active rail routes covering the same area)

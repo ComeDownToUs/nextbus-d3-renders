@@ -2,7 +2,8 @@ export const d3Defaults = {
   classPrefix: "d3 ",
   outerClass: "classReqd",
   text: false,
-  mouseOver: () => {}
+  mouseOver: () => {},
+  keyID: "PlaceholderValueForDynamicPropertyKey"
 };
 
 export const streetOptions = {
@@ -23,6 +24,7 @@ export const routeOptions = {
 export const selectedRouteOptions = {
   ...d3Defaults,
   outerClass: "selected-route",
+  classPrefix: "route",
   customStroke: true
 };
 
@@ -36,5 +38,6 @@ export const neighborhoodOptions = {
 export const busOptions = {
   ...d3Defaults,
   classPrefix: "bus ",
-  outerClass: "live-data"
+  outerClass: "live-data",
+  isBus: true,
 };

@@ -17,7 +17,8 @@ const buildStopPoints = directory => {
     stopPoints.features.push({
       type: "Feature",
       properties: {
-        title: stopJson[i].title
+        title: stopJson[i].title,
+        tag: stopJson[i].tag
       },
       geometry: {
         type: "Point",

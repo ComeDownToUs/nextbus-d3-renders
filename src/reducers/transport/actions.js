@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import { agency } from "../../transit.config.js";
+
 import {
   FETCHING_DATA,
   FETCHED_DATA,
@@ -74,7 +76,8 @@ const liveDataPoints = data => {
     type: "Feature",
     properties: {
       title: entry.id,
-      speed: entry.speedKmHr
+      speed: entry.speedKmHr,
+      direction: entry.heading,
     },
     geometry: {
       type: "Point",

@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { push, Link } from "react-router-dom";
 import { bindActionCreators } from "redux";
 import { connect } from "react-redux";
 import { geoEquirectangular, geoPath } from "d3";
 
-import HoverData from "./hoverdata";
-
-import "../../styles/map.css";
+import Paths from "./paths";
+import LinkPaths from "./linkpaths";
+import Points from "./points";
 
 import {
   getLiveData,
@@ -15,6 +14,9 @@ import {
   isLoading,
   hasLoaded
 } from "../../reducers/transport/actions";
+
+import { center as centerCoordinates } from "../../transit.config.js";
+
 import { doNothing } from "../../helpers/placeholders";
 import { routeParser } from "../../helpers/routeParser";
 
@@ -26,9 +28,11 @@ import {
   busOptions
 } from "./d3displayoptions";
 
-import neighborhoods from "../../data/json/neighborhoods.json";
-import streets from "../../data/json/streets.json";
-import routePaths from "../../data/json/routePaths.json";
+import neighborhoods from "../../data/geojson/neighborhoods.json";
+import streets from "../../data/geojson/streets.json";
+import routePaths from "../../data/geojson/routePaths.json";
+
+import "../../styles/map.css";
 
 class SFMap extends Component {
   constructor(props) {
@@ -51,13 +55,11 @@ class SFMap extends Component {
     this.liveSetup();
   }
   componentWillMount() {
-    //building core map operations
-    this.neighborhoods = this.buildPath(neighborhoods, neighborhoodOptions);
-    this.streets = this.buildPath(streets, streetOptions);
+    //building core map operations on mount so they don't redundantly rerender
+    this.neighborhoods = this.buildPaths(neighborhoods, neighborhoodOptions);
+    this.streets = this.buildPaths(streets, streetOptions);
     this.routes = this.buildRoutes(routePaths, routeOptions);
   }
-  componentDidMount() {}
-  componentWillUpdate() {}
   componentDidUpdate(prevProps, prevState) {
     const oldRouteID = this.path.id;
     this.path = routeParser(this.props.path);
@@ -66,11 +68,13 @@ class SFMap extends Component {
     }
   }
 
+  // prevents UI confusion by clearing data relevant to old page
   newPathId() {
     this.locationCheck = doNothing;
     this.props.clearLiveData();
   }
 
+  // updates the interval operations
   liveSetup() {
     if (this.path.id) {
       this.props.getLiveData(this.path.id);
@@ -85,82 +89,80 @@ class SFMap extends Component {
     }
   }
 
-  getGeoPath() {
+  // D3 related operations
+  // child components are naive to projection matters
+  projection() {
     const { width, height, scale } = this;
-    const equiProjection = geoEquirectangular()
+    return geoEquirectangular()
       .scale(190000 * scale)
-      .rotate([0, 0])
-      .center([-122.434756486329144, 37.747849389243228])
-      .translate([width / 2, height / 1.5]);
-    return geoPath().projection(equiProjection);
+      .translate([width / 2, height / 1.5])
+      .center(centerCoordinates)
+      .rotate([0, 0]);
   }
-
-  buildPath(dataSet, options) {
-    const gPath = this.getGeoPath();
-    const isBus = options.classPrefix.indexOf("bus") !== -1 ? true : false;
-    const geo = dataSet.features.map((d, i) => (
-      <path
-        key={"path" + i}
-        d={gPath(d)}
-        className={
-          isBus && d.properties.speed > 0
-            ? options.classPrefix + "moving"
-            : options.classPrefix + d.properties[options.keyID]
-        }
-        stroke={options.stroke}
-        strokeWidth={options.strokeWidth}
-        fill={options.fill}
-        onClickCapture={() => {
-          options.mouseOver(d.properties);
-        }}
-      />
-    ));
-    return <g className={options.outerClass}>{geo}</g>;
+  getGeoPath(projection) {
+    return geoPath().projection(projection);
   }
-
-  buildRoutes(dataSet, options) {
-    this.props.isLoading();
-    const gPath = this.getGeoPath();
-    const geo = dataSet.features.map((d, i) => (
-      <Link key={`route-link-${i}`} to={`/route/${d.properties.tag}`}>
-        <path
-          key={"path" + i}
-          d={gPath(d)}
-          className={`route route-${d.properties.title}`}
-          stroke={options.customStroke ? d.properties.color : null}
-          onMouseEnter={() => {
-            this.props.updateDataField(d.properties.tag);
-            this.dataView = this.getDataView(d.properties);
-          }}
-          onMouseLeave={() => {
-            this.props.updateDataField(null);
-            this.dataView = null;
-          }}
-          onClick={() => {
-            this.newPathId();
-          }}
-        />
-      </Link>
-    ));
-    return <g className={options.outerClass}>{geo}</g>;
-  }
-
-  getDataView(properties) {
-    const route = this.props.routes[properties.tag];
+  buildPaths(dataSet, options) {
     return (
-      <HoverData
-        route={route}
-        start={this.props.stops[route.stops[0]]}
-        end={this.props.stops[route.stops[route.stops.length - 1]]}
+      <Paths
+        dataSet={dataSet}
+        options={options}
+        projection={this.projection()}
+        getGeoPath={this.getGeoPath}
       />
     );
+  }
+  buildPoints(dataSet, options) {
+    this.props.isLoading();
+    return (
+      <Points
+        dataSet={dataSet}
+        options={options}
+        projection={this.projection()}
+      />
+    );
+  }
+  buildRoutes(dataSet, options) {
+    this.props.isLoading();
+    return (
+      <LinkPaths
+        dataSet={dataSet}
+        options={options}
+        projection={this.projection()}
+        getGeoPath={this.getGeoPath}
+        linkDir={"route"}
+        updateDataField={this.props.updateDataField}
+        routes={this.props.routes}
+        stops={this.props.stops}
+        setDataView={this.setDataView.bind(this)}
+        newPathId={this.newPathId.bind(this)}
+      />
+    );
+  }
+  buildFocusRoute(dataSet, options) {
+    const focusRoute = {
+      features: dataSet.features.filter(
+        (
+          route // <--- Hacky
+        ) => route.properties.tag === this.path.id
+      )
+    };
+    return this.buildRoutes(focusRoute, options);
+  }
+
+  // updates the popup on hovering over a route
+  setDataView(value) {
+    this.dataView = value;
   }
 
   render() {
     const { width, height } = this;
     return (
       <div>
-        {this.props.isFetching ? "Loading..." : "Data goes here"}
+        {this.props.isFetching
+          ? "Loading..."
+          : "some geo status stuff goes here"}
+        {/* Map adjusts to screen size currently, should pan and zoom */}
         <svg
           preserveAspectRatio="xMinYMin meet"
           viewBox={"0 0 " + width + " " + height * 2}
@@ -170,20 +172,15 @@ class SFMap extends Component {
           {this.streets}
           {this.routes}
           {this.path.id
-            ? this.buildRoutes(
-                {
-                  features: routePaths.features.filter(
-                    r => r.properties.tag === this.path.id
-                  )
-                },
-                selectedRouteOptions
-              )
+            ? this.buildFocusRoute(routePaths, selectedRouteOptions)
             : null}
           {this.props.liveData !== null && this.path.id
-            ? this.buildPath(this.props.liveData, busOptions)
+            ? this.buildPoints(this.props.liveData, busOptions)
             : null}
         </svg>
-        {this.dataView ? this.dataView : null}
+        {// To be passed up from child components, this dynamically accommodates
+        // various styles depending on what needs to be pushed out of the SVG confines
+        this.dataView ? this.dataView : null}
       </div>
     );
   }

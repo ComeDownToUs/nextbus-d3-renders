@@ -9,21 +9,14 @@ import { routeParser as urlParser } from "../../helpers/routeParser";
 
 import "../../styles/route.css";
 
-const getRouteStops = (routeData, stopData) => {
-  const filteredStops = [...new Set(routeData.stops)];
-  const stops = filteredStops.map(stopID => stopData[stopID].title);
-  return stops;
-};
-
 const RouteView = props => {
   const urlData = urlParser(props.pathname);
-  console.log(urlData);
   if (Object.keys(props.routes).indexOf(urlData.id) === -1) {
     props.fourOhFour();
     return <div>Error has occurred, redirecting...</div>;
   }
   const routeData = props.routes[urlData.id];
-  const routeStops = getRouteStops(routeData, props.stops);
+  const routeStops = routeData.stops.map(stopID => props.stops[stopID].title);
   return (
     <div className="route-view">
       <h1>{routeData.title}</h1>
