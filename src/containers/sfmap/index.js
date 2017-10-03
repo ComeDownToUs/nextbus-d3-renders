@@ -15,6 +15,8 @@ import {
   hasLoaded
 } from "../../reducers/transport/actions";
 
+import { center as centerCoordinates } from "../../transit.config.js";
+
 import { doNothing } from "../../helpers/placeholders";
 import { routeParser } from "../../helpers/routeParser";
 
@@ -94,7 +96,7 @@ class SFMap extends Component {
     return geoEquirectangular()
       .scale(190000 * scale)
       .translate([width / 2, height / 1.5])
-      .center([-122.434756486329144, 37.747849389243228])
+      .center(centerCoordinates)
       .rotate([0, 0]);
   }
   getGeoPath(projection) {
@@ -139,8 +141,11 @@ class SFMap extends Component {
   }
   buildFocusRoute(dataSet, options) {
     const focusRoute = {
-      features: dataSet.features.filter((route) => // <--- Hacky
-        route.properties.tag === this.path.id)
+      features: dataSet.features.filter(
+        (
+          route // <--- Hacky
+        ) => route.properties.tag === this.path.id
+      )
     };
     return this.buildRoutes(focusRoute, options);
   }
@@ -154,7 +159,9 @@ class SFMap extends Component {
     const { width, height } = this;
     return (
       <div>
-        {this.props.isFetching ? "Loading..." : "some geo status stuff goes here"}
+        {this.props.isFetching
+          ? "Loading..."
+          : "some geo status stuff goes here"}
         {/* Map adjusts to screen size currently, should pan and zoom */}
         <svg
           preserveAspectRatio="xMinYMin meet"
@@ -171,11 +178,9 @@ class SFMap extends Component {
             ? this.buildPoints(this.props.liveData, busOptions)
             : null}
         </svg>
-        { 
-          // To be passed up from child components, this dynamically accommodates
-          // various styles depending on what needs to be pushed out of the SVG confines
-          this.dataView ? this.dataView : null 
-        } 
+        {// To be passed up from child components, this dynamically accommodates
+        // various styles depending on what needs to be pushed out of the SVG confines
+        this.dataView ? this.dataView : null}
       </div>
     );
   }
