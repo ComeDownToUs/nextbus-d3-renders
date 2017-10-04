@@ -19,3 +19,8 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+
+# script generated files that are liable to change a lot
+/nextbus_setup/aggregatedData/*
+/nextbus_setup/geoJSON/*

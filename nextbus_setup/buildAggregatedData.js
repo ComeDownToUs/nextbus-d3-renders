@@ -22,7 +22,7 @@ const getRouteTags = directory => {
 const addNewStops = stops => {
   let duplicateCounter = 0;
   stops.map(stop => {
-    if (!stopPoints[stop.stopId]) stopPoints[stop.stopId] = stop;
+    if (!stopPoints[stop.tag]) stopPoints[stop.tag] = stop;
     else {
       duplicateCounter += 1;
     }
@@ -30,10 +30,13 @@ const addNewStops = stops => {
   console.log("Number of duplicate stops ommitted: " + duplicateCounter);
 };
 
+const returnTagValues = array => array.map(entry => entry.tag)
+
 const getRouteStopPoints = (directory, routeTag) => {
   console.log(routeTag);
+  const routeSchedule = readJSON(`${dir}/schedules/${routeTag}.json`)
   try {
-    const routeJson = readJSON(`${directory}/${routeTag}` + ".json", "utf8");
+    const routeJson = readJSON(`${directory}/${routeTag}.json`, "utf8");
     addNewStops(routeJson.route.stop);
     abbreviatedRoutes[routeJson.route.tag] = {
       title: routeJson.route.title,
@@ -42,9 +45,14 @@ const getRouteStopPoints = (directory, routeTag) => {
       oppositeColor: routeJson.route.oppositeColor,
       max: parseCoordinates([routeJson.route.latMax, routeJson.route.lonMax]),
       min: parseCoordinates([routeJson.route.latMin, routeJson.route.lonMin]),
-      stops: routeJson.route.stop.map(stop => stop.stopId)
+      scheduleStops: {
+        inbound: returnTagValues(routeSchedule.route[0].header.stop),
+        outbound: returnTagValues(routeSchedule.route[1].header.stop)
+      },
+      stops: routeJson.route.stop.map(stop => stop.tag)
     };
   } catch (err) {
+    console.log(err)
     console.log("No data found for route " + routeTag);
   }
 };

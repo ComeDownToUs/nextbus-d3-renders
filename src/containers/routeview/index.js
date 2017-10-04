@@ -9,9 +9,12 @@ import { routeParser as urlParser } from "../../helpers/routeParser";
 
 import "../../styles/route.css";
 
-const getRouteStops = (routeData, stopData) => {
-  const filteredStops = [...new Set(routeData.stops)];
-  const stops = filteredStops.map(stopID => stopData[stopID].title);
+//No duplicates
+const getRouteStops = (routeData, stopData, duplicates = true) => {
+  let stopTags = routeData.stops
+  if(!duplicates)
+    stopTags = [...new Set(stopTags)];
+  const stops = stopTags.map(tag => stopData[tag].title);
   return stops;
 };
 

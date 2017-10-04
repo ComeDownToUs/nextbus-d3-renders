@@ -54,7 +54,7 @@ const buildRoutes = directory => {
       }
     });
   });
-  writeJSON(`${directory}geoJSONS/routePaths.geojson`, routePaths);
+  writeJSON(`${directory}geoJSONs/routePaths.geojson`, routePaths);
 };
 
 buildRoutes(dir);
